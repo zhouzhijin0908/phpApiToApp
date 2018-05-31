@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use app\common\lib\IAuth;
 
 class Admin extends Controller{
     public function add(){
@@ -18,7 +19,7 @@ class Admin extends Controller{
                 $this->error($validate->getError());
             }
 
-            $data['password'] = md5($data['password']);
+            $data['password'] = IAuth::setpassword($data['password']);
             $data['status'] = 1;
 
             try {
