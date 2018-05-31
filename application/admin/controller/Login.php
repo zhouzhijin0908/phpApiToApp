@@ -9,15 +9,22 @@
 namespace app\admin\controller;
 
 
-use think\Controller;
 use think\exception\DbException;
 use app\common\lib\IAuth;
 
-class Login extends Controller
+class Login extends Base
 {
+    public function _initialize()
+    {
+    }
+
     public function index()
     {
-        return $this->fetch();
+        if ($this->isLogin()){
+            $this->redirect('index/index');
+        }else {
+            return $this->fetch();
+        }
     }
 
     public function check(){
@@ -51,8 +58,15 @@ class Login extends Controller
 
         model('AdminUser')->save($udata, ['id' => $user->id ]);
 
-        session(config('admin.session_user'), $user, 'admin.session_user_scope');
+
+        session(config('admin.session_user'), $user, config('admin.session_user_scope'));
+
         $this->success("登录成功", 'index/index');
+    }
+
+    public function logout(){
+        session(null, config('admin.session_user_scope'));
+        $this->redirect('login/index');
     }
 
 }
